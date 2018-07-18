@@ -1,0 +1,10 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: apply install configuration to all nodes
+  hosts: all
+  remote_user: docker
+
+  roles:
+   - prepare
+   - install

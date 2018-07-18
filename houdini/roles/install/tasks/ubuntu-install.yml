@@ -1,0 +1,49 @@
+---
+- name: copy binaries
+  copy:
+      src: ~/Downloads/bin.zip
+      dest: /tmp/bin.zip
+      force: yes
+- name: unzip binaries
+  unarchive:
+    src: /tmp/bin.zip
+    dest: /opt/houdini/bin/
+    remote_src: yes
+  register: unzip_bin
+- name: fetch houdini.ini
+  tags:
+    - cfg
+  get_url:
+    url: https://raw.githubusercontent.com/qnib/moby/houdini/pkg/houdini/houdini.ini
+    dest: /etc/docker/houdini.ini
+    mode: 0644
+  register: fetch_cfg
+- name: comment ExecStart
+  tags:
+    - cfg
+  lineinfile:
+    path: /lib/systemd/system/docker.service
+    regexp: '^ExecStart=.*'
+    line: 'ExecStart=/opt/houdini/bin/dockerd -H fd:// -H unix:// -H tcp://0.0.0.0:2376'
+  register: systemd_exec
+- name: insert Environment
+  tags:
+    - cfg
+  lineinfile:
+    path: /lib/systemd/system/docker.service
+    insertafter: "^ExecStart=.*"
+    line: 'Environment=PATH=/opt/houdini/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  register: systemd_env
+- name: reload unit file
+  tags:
+    - cfg
+  systemd:
+    name: docker
+    state: reloaded
+  when: systemd_env|changed or systemd_exec|changed
+  register: daemon_reload
+- name: service restart
+  systemd:
+    name: docker
+    state: restarted
+  when: daemon_reload|changed or unzip_bin|changed

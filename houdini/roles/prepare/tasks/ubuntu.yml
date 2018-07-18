@@ -1,0 +1,17 @@
+---
+- name: install packages
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+       - nvidia-384
+       - unzip
+       - vim
+  register: nvidia_install
+  ignore_errors: true
+
+- name: sysctl vm.max_map_count=262144
+  command: sysctl -w vm.max_map_count=262144
+#- name: sysctl vm.max_map_count permanent
+  #/etc/sysctl.conf
+  #vm.max_map_count=262144
