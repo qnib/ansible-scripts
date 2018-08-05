@@ -1,0 +1,9 @@
+---
+# This playbook installs rCUDA on a remote host
+
+- name: apply install configuration to all nodes
+  hosts: all
+  remote_user: docker
+
+  roles:
+   - cuda

@@ -1,0 +1,12 @@
+---
+- name: Download cuda.deb
+  get_url:
+      url: https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
+      dest: /tmp/cuda-repo.deb
+      checksum: md5:d735c7fed8be0e72fa853f65042d5438
+- name: Add local cuda-repo
+  command: dpkg -i /tmp/cuda-repo.deb
+- name: Update repositories cache and install "cuda" package
+  apt:
+    name: cuda
+    update_cache: yes
