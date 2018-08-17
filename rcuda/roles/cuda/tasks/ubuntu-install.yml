@@ -6,7 +6,21 @@
       checksum: md5:d735c7fed8be0e72fa853f65042d5438
 - name: Add local cuda-repo
   command: dpkg -i /tmp/cuda-repo.deb
+- name: Download cublas-update.deb
+  get_url:
+      url: https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb
+      dest: /tmp/cublas-update.deb
+- name: Add local cublas-update
+  command: dpkg -i /tmp/cublas-update.deb
 - name: Update repositories cache and install "cuda" package
   apt:
     name: cuda
     update_cache: yes
+
+### CUDNN
+- name: download cudnn
+  get_url:
+      url: http://developer.download.nvidia.com/compute/redist/cudnn/v6.0/cudnn-8.0-linux-x64-v6.0.tgz
+      dest: /tmp/cudnn.tgz
+- name: extract cudnn
+  command: tar xfz /tmp/cudnn.tgz -C /usr/local/cuda-8.0/ --strip-components=1

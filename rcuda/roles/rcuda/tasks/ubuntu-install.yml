@@ -1,0 +1,52 @@
+---
+- name: copy rCUDA
+  tags:
+    - rcuda
+  copy:
+      src: files/rCUDAv18.03beta-CUDA8.0-cuDNN6.0-linux64.tgz
+      dest: /tmp/rCUDA-linux64.tgz
+- name: create /usr/local/rcuda/
+  tags:
+    - rcuda
+  file:
+    path: /usr/local/rcuda/
+    state: directory
+    mode: 0755
+- name: Unpack rCUDA
+  tags:
+    - rcuda
+  command: tar xfz /tmp/rCUDA-linux64.tgz -C /usr/local/rcuda/ --strip-component=1
+- name: copy rCUDA systemd unit
+  tags:
+    - rcuda
+  copy:
+      src: files/rcuda.service
+      dest: /lib/systemd/system/rcuda.service
+- name: copy rcuda-server.sh
+  tags:
+    - rcuda
+  copy:
+      src: files/rcuda-server.sh
+      dest: /usr/local/rcuda/bin/rcuda-server.sh
+      mode: 0755
+- name: Stop rcuda server
+  tags:
+    - rcuda
+  systemd:
+    name: rcuda
+    daemon_reload: yes
+    state: stopped
+- name: copy GOLAND helper go-rcudad
+  tags:
+    - rcuda
+  get_url:
+    url: https://github.com/qnib/go-rcudad/releases/download/v0.1.3/go-rcudad
+    dest: /usr/local/rcuda/bin/go-rcudad
+    mode: 0755
+    checksum: md5:3c40600153f558f0d3c0fc9593be6350
+- name: Starting rcuda server
+  tags:
+    - rcuda
+  systemd:
+    name: rcuda
+    state: started

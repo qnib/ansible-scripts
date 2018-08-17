@@ -1,10 +1,21 @@
 ---
 - name: copy binaries
+  tags:
+    - binary
   copy:
-      src: ~/Downloads/bin.zip
+      src: ~/Downloads/bin-ext.zip
       dest: /tmp/bin.zip
       force: yes
+- name: create /opt/houdini/bin/
+  tags:
+    - binary
+  file:
+    path: /opt/houdini/bin/
+    state: directory
+    mode: 0755
 - name: unzip binaries
+  tags:
+    - binary
   unarchive:
     src: /tmp/bin.zip
     dest: /opt/houdini/bin/
@@ -40,10 +51,10 @@
   systemd:
     name: docker
     state: reloaded
-  when: systemd_env|changed or systemd_exec|changed
+  when: systemd_env is changed or systemd_exec is changed
   register: daemon_reload
 - name: service restart
   systemd:
     name: docker
     state: restarted
-  when: daemon_reload|changed or unzip_bin|changed
+  when: daemon_reload is changed or unzip_bin is changed
