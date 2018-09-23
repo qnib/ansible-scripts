@@ -1,0 +1,10 @@
+---
+# This playbook installs cuda8 and the prerequisite for the qnib-device-plugin on a remote host
+
+- name: apply install configuration to all nodes
+  hosts: all
+  remote_user: docker
+
+  roles:
+   - cuda
+   - qnib-device-plugin

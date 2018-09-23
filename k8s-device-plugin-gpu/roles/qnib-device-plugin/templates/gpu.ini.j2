@@ -1,0 +1,14 @@
+[devices]
+# Devices to announce via plugin
+gpus={% for item in gpus.files %}{% if not loop.first %},{% endif %}{{item.path}}{% if loop.last %}
+{% endif %}{% endfor %}
+
+sidekicks={% for item in sidekicks.files %}{% if not loop.first %},{% endif %}{{item.path}}{% endfor %}
+
+[mounts]
+# Mounts to provide to container
+libs=/usr/local/cuda-8.0/lib64
+bins=/usr/bin/nvidia-smi
+
+[environment]
+libs=LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
