@@ -7,8 +7,8 @@ sidekicks={% for item in sidekicks.files %}{% if not loop.first %},{% endif %}{{
 
 [mounts]
 # Mounts to provide to container
-libs=/usr/local/cuda-8.0/lib64
+libs=/usr/local/cuda-8.0/lib64,/usr/lib/nvidia-384/
 bins=/usr/bin/nvidia-smi
 
 [environment]
-libs=LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
+libs=LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:/usr/local/cuda-8.0/targets/x86_64-linux/lib/stubs/:/usr/lib/nvidia-384/
