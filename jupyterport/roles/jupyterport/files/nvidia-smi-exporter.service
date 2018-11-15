@@ -1,0 +1,8 @@
+[Unit]
+Description=Nvidia SMI Exporter
+
+[Service]
+ExecStart=/usr/local/bin/nvidia_smi_exporter 9999
+
+[Install]
+WantedBy=multi-user.target

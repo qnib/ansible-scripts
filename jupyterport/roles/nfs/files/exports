@@ -1,0 +1,1 @@
+/data/nfs      *(rw,sync,root_squash,subtree_check)

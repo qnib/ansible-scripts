@@ -1,0 +1,20 @@
+---
+- name: Install nfs
+  tags: ["nfs"]
+  apt:
+    name: nfs-common
+    update_cache: yes
+- name: create /nfs
+  tags: ["nfs"]
+  file:
+    path: /nfs
+    state: directory
+    mode: 0755
+- name: write exports
+  tags: ["nfs"]
+  mount:
+    src: '172.31.35.180:/data/nfs'
+    path: '/nfs'
+    fstype: nfs
+    opts: 'rw,soft,intr,noatime,x-gvfs-show'
+    state: mounted

@@ -1,0 +1,3 @@
+- include: nfs-server.yml
+  when: hostvars[inventory_hostname].manager == "true"
+- include: nfs-client.yml

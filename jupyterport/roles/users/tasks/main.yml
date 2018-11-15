@@ -1,0 +1,37 @@
+- name: Create groups
+  tags: ["users"]
+  group:
+    gid: "{{ item.gid }}"
+    name: "{{ item.name }}"
+    state: present
+  loop:
+    - { name: 'devA', gid: '2000' }
+    - { name: 'devB', gid: '3000' }
+
+- name: Create users
+  tags: ["users"]
+  user:
+    name: "{{ item.name }}"
+    home: "/nfs/home/{{ item.name}}"
+    uid: "{{ item.uid }}"
+    group: "{{ item.gid }}"
+  loop:
+    - { name: 'aliceA', uid: '2001', gid: '2000'}
+    - { name: 'bobA', uid: '2002', gid: '2000'}
+    - { name: 'charlieA', uid: '2003', gid: '2000'}
+    - { name: 'aliceB', uid: '3001', gid: '3000'}
+    - { name: 'bobB', uid: '3002', gid: '3000'}
+    - { name: 'charlieB', uid: '3003', gid: '3000'}
+
+- name: create bashrc
+  tags: ["users"]
+  copy:
+    src: /home/docker/.bashrc
+    dst: "/nfs/home/{{ item.name}}/.bashrc"
+  loop:
+    - { name: 'aliceA'}
+    - { name: 'bobA'}
+    - { name: 'charlieA'}
+    - { name: 'aliceB'}
+    - { name: 'bobB'}
+    - { name: 'charlieB'}

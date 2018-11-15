@@ -1,0 +1,12 @@
+[devices]
+### List of hosts with remote GPUs to access
+hosts=172.31.14.41
+### Each list item with the comma separated list of devIds
+172.31.14.41=0
+
+[mounts]
+# Mounts to provide to container
+libs=/usr/local/rcuda/lib/:/usr/local/cuda/lib64
+
+[environment]
+libs=LD_LIBRARY_PATH=/usr/local/cuda/lib64

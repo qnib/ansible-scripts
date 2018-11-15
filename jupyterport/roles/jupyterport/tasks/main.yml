@@ -1,0 +1,41 @@
+#- name: Copy cifar10
+#  tags:
+#    - jupyterport
+#  copy:
+#    src: data-cifar10.tar
+#    dest: /tmp/cifar10.tar
+#    owner: docker
+#    group: docker
+#    mode: 0644
+#- name: Load Image
+#  tags:
+#    - jupyterport
+#  command: docker load -i /tmp/cifar10.tar
+#- name: Rm Image
+#  tags:
+#    - jupyterport
+#  command: rm /tmp/cifar10.tar
+- name: Download nvidia_smi_exporter
+  tags:
+    - jupyterport
+    - nvidia-smi-exporter
+  get_url:
+    url: https://github.com/ChristianKniep/nvidia_smi_exporter/releases/download/0.1/nvidia_smi_exporter
+    dest: /usr/local/bin/nvidia_smi_exporter
+    mode: 0755
+- name: copy nvidia_smi_exporter systemd unit
+  tags:
+    - jupyterport
+    - nvidia-smi-exporter
+  copy:
+      src: files/nvidia-smi-exporter.service
+      dest: /lib/systemd/system/nvidia-smi-exporter.service
+- name: restart nvidia_smi_exporter server
+  tags:
+    - jupyterport
+    - nvidia-smi-exporter
+  systemd:
+    name: nvidia-smi-exporter
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

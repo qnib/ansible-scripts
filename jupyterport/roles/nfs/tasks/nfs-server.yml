@@ -1,0 +1,15 @@
+---
+- name: Install nfs
+  tags: ["nfs"]
+  apt:
+    name: nfs-kernel-server
+    update_cache: yes
+- name: write exports
+  tags: ["nfs"]
+  copy:
+      src: files/exports
+      dest: /etc/exports
+- name: restart nfsd
+  service:
+    name: nfs-server
+    state: restarted

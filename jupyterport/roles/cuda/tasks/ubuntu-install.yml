@@ -1,0 +1,53 @@
+---
+- name: Download cuda.deb
+  tags: ["cuda"]
+  get_url:
+      url: http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+      dest: /tmp/cuda-repo.deb
+- name: Add local cuda-repo
+  tags: ["cuda"]
+  command: dpkg -i /tmp/cuda-repo.deb
+
+- name: Update repositories cache and install "cuda" package
+  tags: ["cuda"]
+  apt:
+    name: cuda-9-0
+    update_cache: yes
+    allow_unauthenticated: yes
+  register: task_result
+- name: Update repositories cache and install "cuda-cublas" package
+  tags: ["cuda"]
+  apt:
+    name: cuda-cublas-dev-9-0
+    update_cache: yes
+    allow_unauthenticated: yes
+  register: task_result
+### CUDNN
+- name: download cudnn
+  tags: ["cuda"]
+  get_url:
+      url: http://developer.download.nvidia.com/compute/redist/cudnn/v7.3.1/cudnn-9.0-linux-x64-v7.3.1.20.tgz
+      dest: /tmp/cudnn.tgz
+- name: extract cudnn
+  tags: ["cuda"]
+  command: tar xfz /tmp/cudnn.tgz -C /usr/local/cuda-9.0/ --strip-components=1
+
+- name: Reboot immediately if there was a change.
+  tags: ["cuda"]
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when: task_result is changed
+
+- name: Wait for the reboot to complete if there was a change.
+  tags: ["cuda"]
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when: task_result is changed
+
+- name: Run nvidida-smi
+  tags: ["cuda"]
+  command: nvidia-smi -L
