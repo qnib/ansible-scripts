@@ -1,0 +1,60 @@
+- name: create bashrc for aliceA
+  tags: ["users"]
+  become: yes
+  become_user: aliceA
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/aliceA/.bashrc"
+    owner: "2001"
+    group: "2000"
+    mode: 0700
+- name: create bashrc for aliceB
+  tags: ["users"]
+  become: yes
+  become_user: aliceB
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/aliceB/.bashrc"
+    owner: "3001"
+    group: "3000"
+    mode: 0700
+- name: create bashrc for bobA
+  tags: ["users"]
+  become: yes
+  become_user: bobA
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/bobA/.bashrc"
+    owner: "2002"
+    group: "2000"
+    mode: 0700
+- name: create bashrc for bobB
+  tags: ["users"]
+  become: yes
+  become_user: bobB
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/bobB/.bashrc"
+    owner: "3002"
+    group: "3000"
+    mode: 0700
+- name: create bashrc for charlieA
+  tags: ["users"]
+  become: yes
+  become_user: charlieA
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/charlieA/.bashrc"
+    owner: "2003"
+    group: "2000"
+    mode: 0700
+- name: create bashrc for charlieB
+  tags: ["users"]
+  become: yes
+  become_user: charlieB
+  copy:
+    src: files/bashrc
+    dest: "/nfs/home/charlieB/.bashrc"
+    owner: "3003"
+    group: "3000"
+    mode: 0700

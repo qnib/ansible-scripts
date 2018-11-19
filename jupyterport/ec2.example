@@ -1,0 +1,17 @@
+[manager]
+10.0.0.1
+
+[gpu]
+10.0.0.2
+
+[manager:vars]
+manager=true
+priv_ip=10.0.0.1
+
+[gpu:vars]
+manager=false
+rcuda=false
+qnib_dev_plugin=true
+swap_docker=false
+cuda10=true
+cuda9=false

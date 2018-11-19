@@ -1,0 +1,2 @@
+- include: docker.yml
+  when: hostvars[inventory_hostname].manager == "false" and hostvars[inventory_hostname].swap_docker == "true"

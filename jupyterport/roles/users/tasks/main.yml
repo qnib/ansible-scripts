@@ -23,15 +23,5 @@
     - { name: 'bobB', uid: '3002', gid: '3000'}
     - { name: 'charlieB', uid: '3003', gid: '3000'}
 
-- name: create bashrc
-  tags: ["users"]
-  copy:
-    src: /home/docker/.bashrc
-    dst: "/nfs/home/{{ item.name}}/.bashrc"
-  loop:
-    - { name: 'aliceA'}
-    - { name: 'bobA'}
-    - { name: 'charlieA'}
-    - { name: 'aliceB'}
-    - { name: 'bobB'}
-    - { name: 'charlieB'}
+- name: create bashrc files
+  include: bashrc.yml

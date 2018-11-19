@@ -1,17 +1,10 @@
 ---
 - name: Download cuda.deb
   get_url:
-      url: https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
+      url: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
       dest: /tmp/cuda-repo.deb
-      checksum: md5:d735c7fed8be0e72fa853f65042d5438
 - name: Add local cuda-repo
   command: dpkg -i /tmp/cuda-repo.deb
-- name: Download cublas-update.deb
-  get_url:
-      url: https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda-repo-ubuntu1604-8-0-local-cublas-performance-update_8.0.61-1_amd64-deb
-      dest: /tmp/cublas-update.deb
-- name: Add local cublas-update
-  command: dpkg -i /tmp/cublas-update.deb
 - name: Update repositories cache and install "cuda" package
   apt:
     name: cuda

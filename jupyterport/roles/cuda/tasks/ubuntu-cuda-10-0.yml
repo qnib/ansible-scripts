@@ -1,0 +1,51 @@
+---
+- name: Download cuda10.0.deb
+  tags: ["cuda"]
+  get_url:
+      url: https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda-repo-ubuntu1804-10-0-local-10.0.130-410.48_1.0-1_amd64
+      dest: /tmp/cuda-10-0-repo.deb
+- name: Add local cuda-10-0-repo
+  tags: ["cuda"]
+  command: dpkg -i /tmp/cuda-10-0-repo.deb
+- name: add cuda-10-0 apt key
+  tags:
+    - cuda
+    - cuda10
+  apt_key:
+    url:  https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+    state: present
+- name: Update repositories cache and install "cuda-10-0" package
+  tags:
+    - cuda
+    - cuda10
+  apt:
+    name: cuda
+    update_cache: yes
+    allow_unauthenticated: yes
+  register: task_result
+
+- name: Reboot immediately if there was a change.
+  tags:
+    - cuda
+    - cuda10
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when: task_result is changed
+
+- name: Wait for the reboot to complete if there was a change.
+  tags:
+    - cuda
+    - cuda10
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when: task_result is changed
+
+- name: Run nvidida-smi
+  tags:
+    - cuda
+    - cuda10
+  command: nvidia-smi -L

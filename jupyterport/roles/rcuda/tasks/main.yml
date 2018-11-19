@@ -1,2 +1,2 @@
 - include: ubuntu-rcudad.yml
-  when: ansible_distribution == "Ubuntu" and hostvars[inventory_hostname].manager == "false"
+  when: hostvars[inventory_hostname].rcuda == "true" and hostvars[inventory_hostname].manager == "false"

@@ -16,6 +16,7 @@
   apt:
     name: cuda
     update_cache: yes
+  register: task_result
 
 ### CUDNN
 - name: download cudnn
@@ -24,3 +25,17 @@
       dest: /tmp/cudnn.tgz
 - name: extract cudnn
   command: tar xfz /tmp/cudnn.tgz -C /usr/local/cuda-8.0/ --strip-components=1
+
+- name: Reboot immediately if there was a change.
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when: task_result is changed
+
+- name: Wait for the reboot to complete if there was a change.
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when: task_result is changed

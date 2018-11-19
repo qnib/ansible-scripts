@@ -1,3 +1,6 @@
-- include: ubuntu-install.yml
-  when: ansible_distribution == "Ubuntu"
-  
+- include: nvidia-runtime.yml
+  when: hostvars[inventory_hostname].manager == "false"
+- include: ubuntu-cuda-10-0.yml
+  when: hostvars[inventory_hostname].manager == "false" and hostvars[inventory_hostname].cuda10 == "true"
+- include: ubuntu-cuda-9-0.yml
+  when: hostvars[inventory_hostname].manager == "false" and hostvars[inventory_hostname].cuda9 == "true"

@@ -1,0 +1,42 @@
+- name: install jq/sponge
+  tags: ["docker"]
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+    - moreutils
+    - jq
+- name: stop docker/containerd
+  tags: ["docker"]
+  service:
+    name: "{{ item }}"
+    state: stopped
+  loop:
+    - docker
+    - containerd
+- name: copy docker/dockerd/containerd
+  tags: ["docker"]
+  copy:
+      src: "files/{{ item }}"
+      dest: "/usr/bin/{{ item }}"
+  loop:
+    - dockerd
+    - docker
+    - containerd
+- name: add/replace gpu-enabled to daemon.json
+  tags: ["docker"]
+  shell: jq '."gpu-enabled" = true' /etc/docker/daemon.json | /usr/bin/sponge /etc/docker/daemon.json
+#- name: add/replace log-driver
+#  tags: ["docker"]
+#  shell: jq '."log-driver"="gelf"' /etc/docker/daemon.json | /usr/bin/sponge /etc/docker/daemon.json
+#- name: add/replace logopts
+#  tags: ["docker"]
+#  shell: jq '."log-opts"={"gelf-address":"udp://127.0.0.1:12201"}' /etc/docker/daemon.json | /usr/bin/sponge /etc/docker/daemon.json
+- name: start docker/containerd
+  tags: ["docker"]
+  service:
+    name: "{{ item }}"
+    state: started
+  loop:
+    - docker
+    - containerd

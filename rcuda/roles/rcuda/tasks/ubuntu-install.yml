@@ -50,3 +50,21 @@
   systemd:
     name: rcuda
     state: started
+
+- name: Create qnib-device-plugin config directory
+  tags:
+    - dev-plugin
+  file:
+    path: /etc/qnib-device-plugin
+    state: directory
+    mode: 0755
+
+- name: Write rcuda.ini
+  tags:
+    - dev-plugin
+  template:
+    src: rcuda.ini.j2
+    dest: /etc/qnib-device-plugin/rcuda.ini
+    owner: root
+    group: root
+    mode: 0644
